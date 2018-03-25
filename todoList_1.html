@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<div id = "app">
-			<input type="text" v-model="val" @keyup.enter = "add"/>
+			请输入任务<input type="text" v-model="val" @keyup.enter = "add"/>
 			<ol>
 				<li v-for = "(a,index) in arr">{{a}}<button @click = "remove(index)">删除任务</button></li>
 			</ol>
