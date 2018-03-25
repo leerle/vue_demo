@@ -79,7 +79,7 @@
 				},
 				methods: {
 					getData() {
-						axios.get('./pro.json').then(res => {
+						axios.get('https://github.com/leerle/vue_demo/blob/master/pro.json').then(res => {
 							this.products = res.data;
 						}, err => {
 							console.log(err);
