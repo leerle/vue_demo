@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<style type="text/css">
+			.del{
+				text-decoration: line-through;
+				color: #cccccc;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-2">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<h3 class="panel-title">您还有 {{count}} 件任务需要处理~~~~~~~~toDoList</h3>
+							</div>
+							<div class="panel-body">
+								请输入任务 <input type="text" v-model="title" @keyup.enter = "add"/>
+							</div>
+							<div class="panel-footer">
+								<ul class="nav nav-pills">
+									<li :class="{active:hash==='unfinished'}">
+										<a href="#/unfinished" >未完成</a>
+									</li>
+									<li :class="{active:hash==='finished'}">
+										<a href="#/finished" >已完成</a>
+									</li>
+									<li :class="{active:hash==='all'}">
+										<a href="#/all">全部任务</a>
+									</li>
+								</ul>
+								<ul class="list-group">
+									<li class="list-group-item" v-for="(todo,index) in filterTodos">
+									<input type="checkbox" v-model="todo.isSelect">
+									&nbsp;&nbsp;<span :class="{del:todo.isSelect}">{{todo.title}}</span>
+									<button class="btn btn-danger pull-right btn-xs" @click="remove(index)">&otimes;</button>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			let vm = new Vue({
+				el:"#app",
+				data:{
+					todos:[
+						{isSelect:false,title:"睡觉"},
+						{isSelect:false,title:"吃饭"}
+					],
+					title:"",
+					hash:""
+				},
+				methods:{
+					add(){
+						this.todos.push({
+							isSelect:false,
+							title:this.title
+						});
+						this.title = "";
+					},
+					remove(i){
+						this.todos = this.todos.filter((item,index)=>index!==i);
+					}
+				},
+				computed:{
+					count(){
+						return this.todos.filter(item=> !item.isSelect).length;
+					},
+					filterTodos(){
+						if(this.hash === 'finished') return this.todos.filter(item=>item.isSelect);
+						if(this.hash === 'unfinished') return this.todos.filter(item=>!item.isSelect);
+						if(this.hash === 'all') return this.todos;
+					}
+				},
+				created(){
+					//从local中取值
+					this.todos = JSON.parse(localStorage.getItem('data')) || this.todos;
+					//监控hash的变化
+					this.hash = window.location.hash.slice(2) || 'unfinished';
+					window.addEventListener('hashchange',()=>{
+						this.hash = window.location.hash.slice(2);
+					})
+				},
+				watch:{
+					todos:{//用来深度监控的，但是这里没有用到，之后会加上去
+						handler(){//默认的时候就是用handler
+							localStorage.setItem('data',JSON.stringify(this.todos));
+						},deep:true
+					}
+				}
+			})
+		</script>
+	</body>
+
+</html>
