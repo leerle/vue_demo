@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	</head>
+	<body>
+		<div id="app">
+			父：{{money}}
+			<button @click="changef">父加100</button>
+			<child :m="money" @change-listen = "listenc"></child>
+		</div>
+		<script type="text/javascript">
+			let vm = new Vue({
+				el:"#app",
+				data:{
+					money:100
+				},
+				methods:{
+					changef(){
+						this.money = this.money+100;
+					},
+					listenc(val){
+						this.money = val;
+					}
+				},
+				components:{
+					child:{
+						props:['m'],//
+						template:'<div>子{{m}} <button @click="getmoney">子加100</button></div>',
+						methods:{
+							getmoney(){
+								this.$emit('change-listen',this.m+100)//触发子组件的自定义事件，让付清的方法执行。
+							}
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>
