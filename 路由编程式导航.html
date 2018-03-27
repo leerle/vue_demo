@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<router-link :to="{path:'/home'}">首页</router-link>
+			<router-link :to="{path:'/list'}">去列表</router-link>
+			<router-view></router-view>
+		</div>
+		<script type="text/javascript">
+			let home = {
+				template:'<div>首页<button @click="golist">去列表页</button></div>',
+				methods:{
+					golist(){
+						this.$router.push("/list")
+					}
+				}
+			}
+			let list = {
+				template:'<div>列表页<button @click="goback">返回</button></div>',
+				methods:{
+					goback(){
+						this.$router.go(-1)
+					}
+				}
+			}
+			let routes = [
+				{path:"/home",component:home},
+				{path:"/list",component:list}
+			]
+			let router = new VueRouter({
+				routes
+			})
+			let vm = new Vue({
+				el:"#app",
+				router
+			})
+		</script>
+	</body>
+</html>
