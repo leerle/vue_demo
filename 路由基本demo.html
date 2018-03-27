@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="https://unpkg.com/vue/dist/vue.js"></script>
+		<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+	</head>
+	<body>
+		<div id="app">
+			<!--这两个都是全局组件-->
+			<router-link to="/home">tohome</router-link>
+			<router-link to="/list">tolist</router-link>
+			<router-view></router-view>
+		</div>
+		<script type="text/javascript">
+			const home = { template: '<div>首页</div>' }
+			const list = { template: '<div>列表</div>' }
+			//建立路由表，将地址与组件连接起来
+			const routes = [
+				{path:"/home",component:home},
+				{path:"/list",component:list}
+			]
+			//创建路由,挂载路由表
+			let router = new VueRouter({
+				//mode:"history",
+				//修改为h5的history模式
+				routes
+			})
+			//注册路由
+			let vm = new Vue({
+				el:"#app",
+				router
+			})
+		</script>
+	</body>
+</html>
